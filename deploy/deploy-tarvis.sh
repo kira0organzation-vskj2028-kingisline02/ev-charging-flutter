@@ -17,6 +17,16 @@ echo "=========================================="
 # Check for docker
 command -v docker >/dev/null 2>&1 || { echo "Error: docker is not installed on tarvis."; exit 1; }
 
+# Detect docker compose or docker-compose
+if docker compose version >/dev/null 2>&1; then
+    COMPOSE_CMD="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
+    COMPOSE_CMD="docker-compose"
+else
+    echo "Error: neither 'docker compose' nor 'docker-compose' found on tarvis."
+    exit 1
+fi
+
 # Ensure data and uploads volume folders exist
 mkdir -p data uploads
 
@@ -55,7 +65,7 @@ fi
 
 # Build and start container with docker compose
 echo "Starting backend container with docker compose..."
-docker compose -f deploy/docker-compose.tarvis.yml up -d --build
+$COMPOSE_CMD -f deploy/docker-compose.tarvis.yml up -d --build
 
 # Wait for container to be healthy
 echo "Waiting for backend healthcheck..."
