@@ -8,15 +8,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Install system dependencies (curl for container healthcheck)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    sqlite3 \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install python dependencies
+# Note: python:3.11-slim includes SQLite in stdlib; wheels are downloaded directly without needing apt packages.
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --default-timeout=100 -r requirements.txt
 
 # Copy application code and migrations
 COPY app/ ./app/
@@ -32,9 +27,9 @@ ENV DB_PATH=/app/data/chargebridge.db \
 
 EXPOSE 8000
 
-# Health check using the /health endpoint
+# Health check using Python's built-in urllib (no external curl package needed)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=4)" || exit 1
 
 # Start Uvicorn with proxy headers enabled for reverse proxy support
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips=*"]

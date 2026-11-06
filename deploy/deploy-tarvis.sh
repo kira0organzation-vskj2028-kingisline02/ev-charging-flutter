@@ -71,7 +71,7 @@ $COMPOSE_CMD -f deploy/docker-compose.tarvis.yml up -d --build
 echo "Waiting for backend healthcheck..."
 sleep 4
 for i in {1..10}; do
-    if docker exec chargebridge-backend curl -sf http://localhost:8000/health >/dev/null 2>&1; then
+    if docker exec chargebridge-backend python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=4)" >/dev/null 2>&1; then
         echo "Backend is healthy and running!"
         break
     fi
