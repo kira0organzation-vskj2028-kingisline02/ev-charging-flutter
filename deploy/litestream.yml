@@ -1,0 +1,10 @@
+dbs:
+  - path: /home/ubuntu/chargebridge/backend/chargebridge.db
+    replicas:
+      - type: s3
+        bucket: chargebridge-backup
+        path: db
+        endpoint: https://<account>.r2.cloudflarestorage.com
+        access-key-id: ${LITESTREAM_ACCESS_KEY_ID}
+        secret-access-key: ${LITESTREAM_SECRET_ACCESS_KEY}
+

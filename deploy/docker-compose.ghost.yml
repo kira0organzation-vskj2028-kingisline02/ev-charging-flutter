@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: caddy:2-alpine
+    container_name: chargebridge-frontend
+    restart: unless-stopped
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./Caddyfile.ghost:/etc/caddy/Caddyfile:ro
+      - ./web:/srv:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:4001/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

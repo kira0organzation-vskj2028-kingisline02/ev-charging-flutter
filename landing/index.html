@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChargeBridge - EV Charger Sharing Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --primary-light: #d1fae5;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-light: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--surface-light);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--primary); }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--surface-light);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-light);
+    }
+    .hero {
+      text-align: center;
+      padding: 6rem 5% 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .features {
+      padding: 5rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-light);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .stats-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--surface-light);
+      border-bottom: 1px solid var(--surface-light);
+      padding: 3rem 5%;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      margin: 4rem 0;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    footer {
+      padding: 3rem 5%;
+      text-align: center;
+      border-top: 1px solid var(--surface-light);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">⚡ ChargeBridge</a>
+    <nav>
+      <a href="#how-it-works">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#hosts">For Hosts</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="https://app.yourdomain.com" class="btn btn-primary" style="margin-left: 2rem;">Launch Web App</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="badge">🌱 The Airbnb for EV Charging</div>
+    <h1>Turn Your Home EV Charger Into Passive Income</h1>
+    <p>ChargeBridge seamlessly connects EV drivers with trusted local charger hosts. Find nearby high-speed chargers or monetize your home charger when idle.</p>
+    <div class="hero-actions">
+      <a href="https://app.yourdomain.com" class="btn btn-primary">Find a Charger</a>
+      <a href="#hosts" class="btn btn-secondary">List Your Charger</a>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div>
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Verified Hosts</div>
+    </div>
+    <div>
+      <div class="stat-number">12%</div>
+      <div class="stat-label">Low Platform Fee</div>
+    </div>
+    <div>
+      <div class="stat-number">88%</div>
+      <div class="stat-label">Paid to Hosts</div>
+    </div>
+    <div>
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Slot Reservation</div>
+    </div>
+  </div>
+
+  <section id="features" class="features">
+    <div class="card">
+      <div class="card-icon">📍</div>
+      <h3>Live Interactive Map</h3>
+      <p>Discover available chargers nearby using OpenStreetMap tiles with instant connector filtering (CCS2, Type 2, GB/T, 3-pin) and distance sorting.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h3>Guaranteed Slots</h3>
+      <p>Lock your charging reservation with atomic concurrency locks. No more queuing or showing up to occupied charger sockets.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💳</div>
+      <h3>Secure Payments</h3>
+      <p>Powered by Razorpay UPI, cards, and net banking. Automatic fair refund tiers if your travel plans change.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>AI Smart Assistant</h3>
+      <p>Hosts can write engaging listing descriptions and calculate competitive pricing with our Gemini-powered listing assistant.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>Host Earnings Dashboard</h3>
+      <p>Real-time tracking of charging sessions, utilization rates, and direct weekly bank/UPI payouts.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⭐</div>
+      <h3>Verified Reviews</h3>
+      <p>Read authentic driver reviews and ratings from actual completed charging sessions before you plug in.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 ChargeBridge Technologies Pvt Ltd. All rights reserved.</p>
+    <p style="margin-top: 0.5rem;">
+      <a href="/privacy.html">Privacy Policy</a> • 
+      <a href="/terms.html">Terms of Service</a> • 
+      <a href="/terms.html#safety">Electrical Safety Guidelines</a>
+    </p>
+  </footer>
+</body>
+</html>
+

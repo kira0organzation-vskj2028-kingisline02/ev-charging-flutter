@@ -1,0 +1,14 @@
+[Unit]
+Description=ChargeBridge API
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/chargebridge/backend
+EnvironmentFile=/home/ubuntu/chargebridge/backend/.env
+ExecStart=/home/ubuntu/chargebridge/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
