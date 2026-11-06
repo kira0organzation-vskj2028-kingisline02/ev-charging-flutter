@@ -10,29 +10,12 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - path: ../backend/.env
-        required: false
-      - path: ../.env
-        required: false
-      - path: ./.env
-        required: false
+      - ../backend/.env
     environment:
-      - APP_ENV=${APP_ENV:-production}
-      - DB_PATH=${DB_PATH:-/app/data/chargebridge.db}
-      - UPLOAD_DIR=${UPLOAD_DIR:-/app/uploads}
-      - CORS_ORIGINS=${CORS_ORIGINS:-*}
-      - JWT_SECRET=${JWT_SECRET:-change-this-to-a-secure-random-32char-string-in-prod}
-      - ACCESS_TOKEN_MINUTES=${ACCESS_TOKEN_MINUTES:-15}
-      - REFRESH_TOKEN_DAYS=${REFRESH_TOKEN_DAYS:-30}
-      - COMMISSION_PERCENT=${COMMISSION_PERCENT:-12}
-      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID:-}
-      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET:-}
-      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-}
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
-      - SENTRY_DSN=${SENTRY_DSN:-}
-      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
-      - SMTP_USER=${SMTP_USER:-}
-      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - APP_ENV=production
+      - DB_PATH=/app/data/chargebridge.db
+      - UPLOAD_DIR=/app/uploads
+      - CORS_ORIGINS=*
     volumes:
       - backend_data:/app/data
       - backend_uploads:/app/uploads

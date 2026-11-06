@@ -4,28 +4,29 @@
 # ==============================================================================
 set -euo pipefail
 
+# Ensure we run from the project root directory regardless of invocation path
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$ROOT_DIR"
+
 echo "=========================================="
 echo " Deploying ChargeBridge Backend on tarvis "
+echo " Working directory: $(pwd)                "
 echo "=========================================="
 
-# Check for docker and docker-compose
+# Check for docker
 command -v docker >/dev/null 2>&1 || { echo "Error: docker is not installed on tarvis."; exit 1; }
 
 # Ensure data and uploads volume folders exist
 mkdir -p data uploads
 
-env_file:
-  - path: ../backend/.env
-    required: false
-  - path: ../.env
-    required: false
-  - path: ./.env
-    required: false
-
-# Check if .env exists, if not copy example
-if [ ! -f .env ]; then
-    echo "Creating .env from template..."
-    cat <<EOF > .env
+# Ensure backend/.env exists
+if [ ! -f "backend/.env" ]; then
+    echo "Creating backend/.env from template..."
+    if [ -f "backend/.env.example" ]; then
+        cp backend/.env.example backend/.env
+    else
+        cat <<EOF > backend/.env
 APP_ENV=production
 DB_PATH=/app/data/chargebridge.db
 UPLOAD_DIR=/app/uploads
@@ -39,11 +40,17 @@ RAZORPAY_KEY_SECRET=
 RAZORPAY_WEBHOOK_SECRET=
 GEMINI_API_KEY=
 SENTRY_DSN=
-SMTP_HOST=
+SMTP_HOST=smtp.gmail.com
 SMTP_USER=
 SMTP_PASSWORD=
 EOF
-    echo ".env created. Please edit .env with your Razorpay/Gemini credentials if needed."
+    fi
+    echo "backend/.env created. Please add your SMTP credentials to backend/.env"
+fi
+
+# Ensure root .env exists for docker-compose variable substitution
+if [ ! -f ".env" ]; then
+    cp backend/.env .env
 fi
 
 # Build and start container with docker compose
@@ -52,7 +59,7 @@ docker compose -f deploy/docker-compose.tarvis.yml up -d --build
 
 # Wait for container to be healthy
 echo "Waiting for backend healthcheck..."
-sleep 5
+sleep 4
 for i in {1..10}; do
     if docker exec chargebridge-backend curl -sf http://localhost:8000/health >/dev/null 2>&1; then
         echo "Backend is healthy and running!"
@@ -71,4 +78,3 @@ echo " Backend deployed successfully on tarvis! "
 echo " API running at: http://$(hostname -I | awk '{print $1}'):8000"
 echo " Docs at: http://$(hostname -I | awk '{print $1}'):8000/docs"
 echo "=========================================="
-
