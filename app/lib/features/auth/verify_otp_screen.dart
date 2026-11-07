@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dio/dio.dart';
 import '../../core/theme.dart';
 import '../../data/repositories/auth_repository.dart';
 
@@ -50,9 +51,15 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
         context.go('/auth/login');
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Invalid code or code expired. Please try again.';
-      });
+      String msg = 'Invalid code or code expired. Please try again.';
+      if (e is DioException) {
+        if (e.response == null) {
+          msg = 'Cannot connect to server. Please verify backend is running on tarvis.';
+        } else if (e.response?.data is Map && e.response?.data['detail'] != null) {
+          msg = e.response!.data['detail'].toString();
+        }
+      }
+      setState(() => _errorMessage = msg);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

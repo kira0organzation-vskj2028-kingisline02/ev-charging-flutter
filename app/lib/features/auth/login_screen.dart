@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dio/dio.dart';
 import '../../core/router.dart';
 import '../../core/theme.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -44,11 +45,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go('/map');
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = e.toString().contains('403')
-            ? 'Account not verified. Please verify your email.'
-            : 'Invalid email or password. Please try again.';
-      });
+      String msg = 'Invalid email or password. Please try again.';
+      if (e is DioException) {
+        if (e.response == null) {
+          msg = 'Cannot connect to server. Please verify backend is running on tarvis.';
+        } else if (e.response?.statusCode == 403) {
+          msg = 'Account not verified. Please verify your email.';
+        } else if (e.response?.data is Map && e.response?.data['detail'] != null) {
+          msg = e.response!.data['detail'].toString();
+        }
+      }
+      setState(() => _errorMessage = msg);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

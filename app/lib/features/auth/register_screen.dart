@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dio/dio.dart';
 import '../../core/theme.dart';
+import '../../core/api_client.dart';
 import '../../data/repositories/auth_repository.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -55,10 +56,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       if (e is DioException) {
         final data = e.response?.data;
         if (data is Map && data['detail'] != null) {
-          msg = data['detail'].toString();
+          final detail = data['detail'];
+          if (detail is List) {
+            msg = detail.map((d) => d is Map && d['msg'] != null ? d['msg'].toString() : d.toString()).join('\n');
+          } else {
+            msg = detail.toString();
+          }
         } else if (e.response?.statusCode == 400) {
           msg = 'Email is already registered. Please log in.';
+        } else if (e.response != null) {
+          msg = 'Server returned HTTP ${e.response?.statusCode}. Please try again.';
+        } else {
+          msg = 'Cannot connect to backend server (${ApiClient.defaultBaseUrl}). Please verify the backend container is running on tarvis.';
         }
+      } else {
+        msg = e.toString();
       }
       setState(() => _errorMessage = msg);
     } finally {
